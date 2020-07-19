@@ -1,0 +1,30 @@
+package com.kramer.contactTracker.models;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.*;
+
+@Entity
+public class Contacts {
+
+	@Id
+	@GeneratedValue
+	@Column(name= "id")
+	private Long id;
+	
+	@Column(name = "first_name")
+	private String firstName;
+	
+	@Column(name = "last_name")
+	private String lastName;
+	
+	@Column(name = "dob")
+	private Date dob;
+	
+	@Column(name = "address")
+	private List<Address> address = new ArrayList()
+	
+	
+}

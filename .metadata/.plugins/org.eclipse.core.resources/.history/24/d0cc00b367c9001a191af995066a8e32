@@ -1,0 +1,13 @@
+package com.kramer.contactTracker.models;
+
+import javax.persistence.*;
+
+@Entity
+public class Event {
+
+	@Id
+	@GeneratedValue
+	@Column(name = "event_id")
+	private Long id;
+	
+}

@@ -1,0 +1,5 @@
+package com.kramer.contactTracker.models;
+
+public class Address {
+
+}
