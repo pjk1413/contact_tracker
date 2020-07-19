@@ -2,6 +2,8 @@ package com.kramer.contactTracker.models;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Address {
 
@@ -24,6 +26,10 @@ public class Address {
 	
 	@Column(name = "country")
 	private String country;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "contact_id", nullable = false)
+	private Contact contact;
 	
 	//--------------------------- CONSTRUCTOR ---------------------------------
 	
@@ -79,10 +85,13 @@ public class Address {
 		this.country = country;
 	}
 
-	@Override
-	public String toString() {
-		return "Address [id=" + id + ", address=" + address + ", city=" + city + ", state=" + state + ", zipcode="
-				+ zipcode + ", country=" + country + "]";
+	@JsonIgnore
+	public Contact getContact() {
+		return contact;
+	}
+
+	public void setContact(Contact contact) {
+		this.contact = contact;
 	}
 
 	@Override
@@ -91,6 +100,7 @@ public class Address {
 		int result = 1;
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((contact == null) ? 0 : contact.hashCode());
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
@@ -117,6 +127,11 @@ public class Address {
 				return false;
 		} else if (!city.equals(other.city))
 			return false;
+		if (contact == null) {
+			if (other.contact != null)
+				return false;
+		} else if (!contact.equals(other.contact))
+			return false;
 		if (country == null) {
 			if (other.country != null)
 				return false;
@@ -139,6 +154,15 @@ public class Address {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Address [id=" + id + ", address=" + address + ", city=" + city + ", state=" + state + ", zipcode="
+				+ zipcode + ", country=" + country + ", contact=" + contact + "]";
+	}
+
+	
+	
 	
 	
 	

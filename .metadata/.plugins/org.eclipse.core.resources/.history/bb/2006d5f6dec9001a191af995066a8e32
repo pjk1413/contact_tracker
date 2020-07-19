@@ -1,0 +1,8 @@
+package com.kramer.contactTracker.models;
+
+import javax.persistence.*;
+
+@Entity
+public class PhoneNumber {
+
+}

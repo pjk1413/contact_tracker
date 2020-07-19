@@ -1,0 +1,8 @@
+package com.kramer.contactTracker.enums;
+
+public enum NumberType {
+	Mobile,
+	Home,
+	Work,
+	Other
+}

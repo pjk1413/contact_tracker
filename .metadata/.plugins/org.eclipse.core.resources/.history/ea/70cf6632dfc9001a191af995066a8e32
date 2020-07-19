@@ -1,0 +1,17 @@
+package com.kramer.contactTracker.models;
+
+import javax.persistence.*;
+
+import com.kramer.contactTracker.enums.NumberType;
+
+@Entity
+public class PhoneNumber {
+
+	@Id
+	@GeneratedValue
+	private Long id;
+	
+	private String number;
+	
+	private NumberType type;
+}

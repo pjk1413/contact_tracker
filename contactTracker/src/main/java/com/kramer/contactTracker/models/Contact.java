@@ -1,10 +1,11 @@
 package com.kramer.contactTracker.models;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Contact {
@@ -14,27 +15,28 @@ public class Contact {
 	@Column(name= "contact_id")
 	private Long id;
 	
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
+	
 	@Column(name = "first_name")
 	private String firstName;
 	
 	@Column(name = "last_name")
 	private String lastName;
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "contact")
 	@Column(name = "phone_number")
-	private String phoneNumber;
+	private List<PhoneNumber> phoneNumber = new ArrayList<PhoneNumber>();
 	
 	@Column(name = "email")
 	private String email;
 	
-	//Should this be it's own entity
-	@Column(name = "dob")
-	private Date dob;
-	
-	@OneToMany
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "contact")
 	@Column(name = "address_list")
 	private List<Address> address = new ArrayList<Address>();
 	
-	@OneToMany
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "contact")
 	@Column(name = "event_list")
 	private List<Event> eventList = new ArrayList<Event>();
 	
@@ -54,6 +56,15 @@ public class Contact {
 	
 	public void removeEvent(Event event) {
 		this.eventList.remove(event);
+	}
+	// ----------------- METHODS ------------------------------------
+	
+	public void addPhoneNumber(PhoneNumber phoneNumber) {
+		this.phoneNumber.add(phoneNumber);
+	}
+	
+	public void removePhoneNumber(PhoneNumber phoneNumber) {
+		this.phoneNumber.remove(phoneNumber);
 	}
 	
 	//------------------ CONSTRUCTOR -------------------------------
@@ -86,11 +97,11 @@ public class Contact {
 		this.lastName = lastName;
 	}
 
-	public String getPhoneNumber() {
+	public List<PhoneNumber> getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
+	public void setPhoneNumber(List<PhoneNumber> phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
@@ -100,14 +111,6 @@ public class Contact {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public Date getDob() {
-		return dob;
-	}
-
-	public void setDob(Date dob) {
-		this.dob = dob;
 	}
 
 	public List<Address> getAddress() {
@@ -125,11 +128,20 @@ public class Contact {
 	public void setEventList(List<Event> eventList) {
 		this.eventList = eventList;
 	}
+	
+	@JsonIgnore
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 	@Override
 	public String toString() {
-		return "Contact [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber="
-				+ phoneNumber + ", email=" + email + ", dob=" + dob + ", address=" + address + ", eventList="
+		return "Contact [id=" + id + ", user=" + user + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", phoneNumber=" + phoneNumber + ", email=" + email + ", address=" + address + ", eventList="
 				+ eventList + "]";
 	}
 
@@ -138,13 +150,13 @@ public class Contact {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((dob == null) ? 0 : dob.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((eventList == null) ? 0 : eventList.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
 
@@ -161,11 +173,6 @@ public class Contact {
 			if (other.address != null)
 				return false;
 		} else if (!address.equals(other.address))
-			return false;
-		if (dob == null) {
-			if (other.dob != null)
-				return false;
-		} else if (!dob.equals(other.dob))
 			return false;
 		if (email == null) {
 			if (other.email != null)
@@ -197,8 +204,17 @@ public class Contact {
 				return false;
 		} else if (!phoneNumber.equals(other.phoneNumber))
 			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
 		return true;
 	}
+
+
+
+
 	
 	
 	
